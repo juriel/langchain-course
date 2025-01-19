@@ -1,0 +1,50 @@
+/* ChatGptMessages styles */
+chat-gpt-messages {
+    display: block;
+    padding: 16px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  /* ChatGptInput styles */
+  chat-gpt-input div {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+  }
+  
+  chat-gpt-input input {
+    flex: 1;
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  chat-gpt-input button {
+    padding: 8px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+
+  body{
+    background-color: bisque;
+  }
+  
+  chat-gpt-input button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* ChatGptApp container */
+  chat-gpt-app {
+    display: block;
+    padding: 16px;
+    font-family: Arial, sans
+  

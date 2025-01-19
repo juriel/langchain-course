@@ -1,101 +1,84 @@
-// Import the Lit library
-import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js';
+import { LitElement, html } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js';
+import { EventBus } from './event-bus.js';
 
-// Define ChatGptMessages component
+// ChatGptMessages Component
 class ChatGptMessages extends LitElement {
-  static properties = {
-    messages: { type: Array },
-  };
+    static properties = {
+        messages: { type: Array },
+    };
 
-  constructor() {
-    super();
-    this.messages = [];
-  }
+    constructor() {
+        super();
+        this.messages = [];
+        EventBus.getInstance().on('chat-gpt-message', (message) => {
+            console.log("ChatGptMessages: ", message);
 
-  render() {
-    return html`
+            this.messages = [...this.messages, message];
+        });
+    }
+
+    render() {
+        return html`
       <div>
         ${this.messages.map((message) => html`<p>${message}</p>`)}
       </div>
     `;
-  }
+    }
+    createRenderRoot() {
+        return this; // Renderiza en el Light DOM.
+    }
 }
 customElements.define('chat-gpt-messages', ChatGptMessages);
 
-// Define ChatGptInput component
+// ChatGptInput Component
 class ChatGptInput extends LitElement {
-  static styles = css`
-    div {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    input {
-      flex: 1;
-      padding: 8px;
-      font-size: 1rem;
-    }
-    button {
-      padding: 8px 16px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-  `;
+    static properties = {
+        onSend: { type: Function },
+    };
 
-  static properties = {
-    onSend: { type: Function },
-  };
+    constructor() {
+        super();
+        this.onSend = null;
 
-  constructor() {
-    super();
-    this.onSend = null;
-  }
-
-  _handleClick() {
-    const input = this.shadowRoot.getElementById('chat-input');
-    const message = input.value.trim();
-    if (message) {
-      this.onSend?.(message);
-      input.value = '';
     }
-  }
 
-  render() {
-    return html`
+    _handleClick() {
+        const input = document.getElementById('chat-input');
+        const message = input.value.trim();
+        console.log("Send Messsage: ", message);
+        if (message) {
+            input.value = '';
+            EventBus.getInstance().emit('chat-gpt-message', message);
+        }
+    }
+
+    render() {
+        return html`
       <div>
-        <input type="text" id="chat-input" placeholder="Type your message here..." />
+        <input type="text" id="chat-input" placeholder="Pregunta acá" />
         <button @click="${this._handleClick}">Send</button>
       </div>
     `;
-  }
+    }
+    createRenderRoot() {
+        return this; // Renderiza en el Light DOM.
+    }
 }
 customElements.define('chat-gpt-input', ChatGptInput);
 
-// Define ChatGptApp (Parent Component)
+// ChatGptApp Component
 class ChatGptApp extends LitElement {
-  static properties = {
-    messages: { type: Array },
-  };
 
-  constructor() {
-    super();
-    this.messages = [];
-  }
-
-  _handleMessage(message) {
-    this.messages = [...this.messages, message];
-  }
-
-  render() {
-    return html`
+    render() {
+        return html`
       <div>
-        <chat-gpt-messages .messages="${this.messages}"></chat-gpt-messages>
-        <chat-gpt-input .onSend="${(msg) => this._handleMessage(msg)}"></chat-gpt-input>
+        <chat-gpt-messages ></chat-gpt-messages>
+        <chat-gpt-input ></chat-gpt-input>
       </div>
     `;
-  }
+    }
+    createRenderRoot() {
+        return this; // Renderiza en el Light DOM.
+    }
 }
 customElements.define('chat-gpt-app', ChatGptApp);
-
-// Add the custom element to the document
-document.body.innerHTML = '<chat-gpt-app></chat-gpt-app>';
