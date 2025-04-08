@@ -8,9 +8,9 @@ import uvicorn
 import os
 from langchain_ollama import ChatOllama
 
-model = ChatOllama(model="phi3.5")
-
-
+ollama_url = "http://192.168.39.136:11434"
+model_name = "phi3.5"
+model = ChatOllama(model=model_name,base_url=ollama_url)
 
 
 ## Hello server servlet using fastapi
