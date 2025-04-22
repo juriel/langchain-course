@@ -1,13 +1,17 @@
 from langchain_ollama import ChatOllama
-from langchain.schema import HumanMessage,AIMessage
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
+from dotenv import load_dotenv
 
+load_dotenv()
 
-ollama_url = "http://192.168.39.136:11434"
-#model_name = "phi3.5"
-model_name = "deepseek-r1"
+llm  = ChatGoogleGenerativeAI(model="gemini-2.0-flash")
+history = []
+history.append(SystemMessage(content="""Eres juriel el profesor de programación de IA. 
+                             Responde a las preguntas de los seguidores de su canal de Youtube.
+                             Siempre debes dar respuestas muy cortas y concisas.
+                             Y con cada respuesta invita a suscribirse y dar click en la campanita"""))
 
-chat  = ChatOllama(model=model_name,base_url=ollama_url)
-history = [] 
 while True:
     try:
         user_input = input("👤 Tú: ")
@@ -15,18 +19,12 @@ while True:
         if user_input.lower() in ['salir', 'exit']:
             break
         history.append(HumanMessage(content=user_input))
-        response = chat.invoke(history)
+        response = llm.invoke(history)
         
-        
-        text_after_think = response.content.split("</think>")[-1].strip()
-
-        
-        print("Bot 🤖:",text_after_think)
-        history.append(AIMessage(content=text_after_think))
+        print("Bot 🤖:",response.content)
+        history.append(AIMessage(content=response.content))
 
 
     except Exception as e:
         print(f"Error: {str(e)}")
         
-
-
