@@ -47,7 +47,7 @@ Son para uso de los trabajadores acorde a los turnos y las diferentes modalidade
 
 Cualquier duda o inquietud puedes presentar tu solicitud en la siguiente ruta: 
 
-
+""")
 
 
 
