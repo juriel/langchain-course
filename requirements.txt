@@ -1,0 +1,13 @@
+langchain
+openai
+tiktoken
+python-dotenv
+requests
+numpy
+pandas
+langchain-google-genai
+mplfinance
+yfinance
+ta
+langchain_openai
+newsapi-python
